@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/csv"
 	"fmt"
 	"github.com/adnanbrq/nanoleaf"
 	"github.com/jinzhu/configor"
@@ -14,6 +15,7 @@ var Config = struct {
 	Ip       string `required:"true"`
 	Token    string `required:"true"`
 	Duration int    `default:"0"`
+	Profiles []string
 }{}
 
 func main() {
@@ -40,6 +42,28 @@ func main() {
 		return
 	}
 
+	if args[0] == "-p" { // profiles
+		if len(args) == 1 { // no profile index given
+			for i, profile := range Config.Profiles {
+				fmt.Println("[" + strconv.Itoa(i) + "] " + profile)
+			}
+			return
+		}
+		index, err := strconv.Atoi(args[1])
+		profile := Config.Profiles[index]
+		r := csv.NewReader(strings.NewReader(profile))
+		r.Comma = ' '
+		args, err = r.Read()
+		if err != nil {
+			panic(err)
+		}
+
+	}
+
+	execCmd(nano, args)
+}
+
+func execCmd(nano *nanoleaf.Nanoleaf, args []string) {
 	cmd := args[0]
 	if !brightness(nano, cmd) {
 		if !colorTemp(nano, cmd) {

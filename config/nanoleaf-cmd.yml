@@ -1,2 +1,7 @@
 ip: 192.168.1.150
 token: wC2A5sve6avJ0qROPAQtmMe7Gfs8yass
+profiles:
+  - '"Northern Lights" 30'
+  - 3000k 70
+  - 3500k 45
+  - '"Pulse Pop Beats" 50'
